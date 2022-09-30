@@ -13,7 +13,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -33,6 +36,20 @@ public class PersonResourceTest {
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .content(toJSON(dto));
+
+        final var result = mockMvc.perform(request);
+
+        result.andExpect(status().isOk());
+    }
+
+
+    @Test
+    void createAll() throws Exception {
+        final var dto = new PersonDTO("Test", 22);
+        final var request = MockMvcRequestBuilders.post("/person/multiple")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(toJSON(List.of(dto)));
 
         final var result = mockMvc.perform(request);
 
